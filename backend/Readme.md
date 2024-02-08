@@ -1,0 +1,7 @@
+### Envs
+
+```
+PORT=8000
+MONGO_URL=
+SECRET_KEY=
+```
