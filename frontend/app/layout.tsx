@@ -5,6 +5,7 @@ import Header from "@/components/shared/Header";
 import Hero from "@/components/shared/Hero";
 import Footer from "@/components/shared/Footer";
 import Providers from "./Providers";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,7 +27,8 @@ export default function RootLayout({
             <Header />
             <Hero />
             {children}
-            <Footer />
+            <Toaster />
+            {/* <Footer /> */}
           </>
         </Providers>
       </body>

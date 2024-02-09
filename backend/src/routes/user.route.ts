@@ -24,16 +24,8 @@ router.post(
       } else {
         user = new User(req.body);
         await user.save();
-        const token = jwt.sign({ userId: user.id }, process.env.SECRET_KEY!, {
-          expiresIn: "1d",
-        });
-        return res
-          .cookie("auth_token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            maxAge: 86400000,
-          })
-          .json({ message: "User created successfully" });
+
+        return res.json({ message: "User created successfully" });
       }
     } catch (error) {
       console.error(error);

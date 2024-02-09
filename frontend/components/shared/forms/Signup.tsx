@@ -16,6 +16,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { register } from "@/lib/apiClient";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import router from "next/router";
 
 export const registerFormSchema = z
   .object({
@@ -40,11 +43,12 @@ const Signup = () => {
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
   });
-
+  const router = useRouter();
   const mutation = useMutation({
     mutationFn: (data: z.infer<typeof registerFormSchema>) => register(data),
     onSuccess(data) {
-      console.log("success");
+      toast.success("Registration Success!");
+      router.push("/auth/login");
     },
     onError(error: Error) {
       console.log(error.message);
@@ -57,8 +61,11 @@ const Signup = () => {
 
   return (
     <Form {...form}>
-      <h1 className="text-3xl mb-6 font-bold">Create an account</h1>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-6 w-1/2 mx-auto"
+      >
+        <h1 className="text-3xl mb-6 font-bold">Create an account</h1>
         <div className="grid grid-cols-2 gap-8">
           <FormField
             control={form.control}

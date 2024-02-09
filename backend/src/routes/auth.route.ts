@@ -3,6 +3,7 @@ import User from "../models/user.model";
 import { check, validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { verifyToken } from "../middleware/auth.middleware";
 const router = Router();
 
 router.post(
@@ -25,7 +26,7 @@ router.post(
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (isMatch) {
-        const token = jwt.sign({ userId: user.id }, process.env.SECRET_KEY!, {
+        const token = jwt.sign({ user: user.id }, process.env.SECRET_KEY!, {
           expiresIn: "1d",
         });
         return res
@@ -34,7 +35,14 @@ router.post(
             secure: process.env.NODE_ENV === "production",
             maxAge: 86400000,
           })
-          .json({ message: "Logged in successfully", userId: user.id });
+          .json({
+            message: "Logged in successfully",
+            user: {
+              id: user.id,
+              name: user.firstName + " " + user.lastName,
+              email: user.email,
+            },
+          });
       } else {
         return res.status(400).json({ message: "Invalid Credentials" });
       }
@@ -44,5 +52,9 @@ router.post(
     }
   }
 );
+
+router.get("/validate-token", verifyToken, (req: Request, res: Response) => {
+  res.status(200).send({ userId: req.userId });
+});
 
 export default router;

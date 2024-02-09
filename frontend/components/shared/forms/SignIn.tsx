@@ -1,4 +1,5 @@
 "use client";
+import { authenticate } from "@/actions/auth.action";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -10,28 +11,37 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
-const formSchema = z.object({
+export const loginFormSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
 });
 
 const SignIn = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof loginFormSchema>>({
+    resolver: zodResolver(loginFormSchema),
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof loginFormSchema>) {
+    const res = await authenticate(values);
+
+    if (res?.error) {
+      toast.error(res.error);
+    }
   }
 
   return (
     <Form {...form}>
-      <h1 className="text-3xl mb-6 font-bold">Login</h1>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-6 w-1/2 mx-auto"
+      >
+        <h1 className="text-3xl mb-6 font-bold">Login</h1>
         <FormField
           control={form.control}
           name="email"
