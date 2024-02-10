@@ -21,7 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
-app.get("/", async (req: Request, res: Response) => {
+
+app.get("/health", async (req: Request, res: Response) => {
   res.send("Hello World");
 });
 
