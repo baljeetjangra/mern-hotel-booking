@@ -8,7 +8,12 @@ import mongoose from "mongoose";
 import userRoutes from "./routes/user.route";
 import authRoutes from "./routes/auth.route";
 
-mongoose.connect(process.env.MONGO_URL as string);
+const mongoUrl =
+  process.env.NODE_ENV === "test"
+    ? process.env.MONGO_URL_TEST
+    : process.env.MONGO_URL;
+
+mongoose.connect(mongoUrl as string).then(() => console.log("Connected to db"));
 
 const app = express();
 app.use(express.json());
