@@ -1,5 +1,4 @@
 import React from "react";
-import { HotelType } from "../../../../backend/src/models/hotel.model";
 import { Button } from "@/components/ui/button";
 import {
   FaBuilding,
@@ -9,6 +8,7 @@ import {
   FaStar,
 } from "react-icons/fa6";
 import Link from "next/link";
+import { HotelType } from "@/types";
 
 const MyHotel = ({ hotel }: { hotel: HotelType }) => {
   return (
