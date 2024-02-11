@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { addHotel } from "@/lib/apiClient";
+import { toast } from "sonner";
 
 export const hotelFormSchema = z.object({
   name: z.string().min(3),
@@ -74,7 +75,7 @@ const CreateHotelForm = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: (data: FormData) => addHotel(data),
     onSuccess: (data) => {
-      console.log("resoi", data);
+      toast.success("Hotel Saved!");
     },
   });
 
@@ -159,6 +160,7 @@ const CreateHotelForm = () => {
                 <FormLabel>Description</FormLabel>
                 <FormControl>
                   <Input
+                    id="description"
                     type="textarea"
                     placeholder="Enter hotel description"
                     {...field}
