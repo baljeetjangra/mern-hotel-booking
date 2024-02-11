@@ -2,6 +2,7 @@ import { hotelFormSchema } from "@/components/shared/forms/CreateHotelForm";
 import { loginFormSchema } from "@/components/shared/forms/SignIn";
 import { registerFormSchema } from "@/components/shared/forms/Signup";
 import { z } from "zod";
+import type { HotelType } from "../../backend/src/models/hotel.model";
 
 export const register = async (
   formData: z.infer<typeof registerFormSchema>
@@ -59,4 +60,20 @@ export const addHotel = async (formData: FormData) => {
   }
 
   return response.json();
+};
+
+export const getMyHotels = async (): Promise<HotelType[]> => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/my-hotels`,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
+  const responseBody = await response.json();
+  if (!response.ok) {
+    throw new Error(responseBody.message);
+  }
+
+  return responseBody;
 };

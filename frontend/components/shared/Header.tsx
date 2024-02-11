@@ -14,9 +14,12 @@ const Header = async () => {
           <Link href="/">MERN Bookings</Link>
         </span>
         {session ? (
-          <Link className="text-white" href="api/auth/signout">
-            Sign out
-          </Link>
+          <div className="text-white">
+            <Link href={"/my-hotels"}>My Hotels </Link>
+            <Link className="" href="api/auth/signout">
+              Sign out
+            </Link>
+          </div>
         ) : (
           <span className="flex space-x-2">
             <Link className="text-white" href="/auth/signin">
