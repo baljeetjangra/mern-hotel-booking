@@ -1,8 +1,7 @@
-import { hotelFormSchema } from "@/components/shared/forms/CreateHotelForm";
 import { loginFormSchema } from "@/components/shared/forms/SignIn";
 import { registerFormSchema } from "@/components/shared/forms/Signup";
+import { HotelType } from "@/types";
 import { z } from "zod";
-import type { HotelType } from "../../backend/src/models/hotel.model";
 
 export const register = async (
   formData: z.infer<typeof registerFormSchema>
