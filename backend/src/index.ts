@@ -24,7 +24,7 @@ const mongoUrl =
 
 mongoose.connect(mongoUrl as string).then(() => console.log("Connected to db"));
 
-const app = express();
+export const app = express();
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -41,5 +41,3 @@ app.get("/health", async (req: Request, res: Response) => {
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
 });
-
-export default app;
