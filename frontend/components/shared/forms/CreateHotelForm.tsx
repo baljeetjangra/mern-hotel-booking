@@ -95,7 +95,7 @@ const CreateHotelForm = () => {
       formData.append(`facilities[${index}]`, facility);
     });
 
-    Array.from(values.imageFiles).forEach((file, index) => {
+    Array.from(values.imageFiles).forEach((file) => {
       formData.append(`imageFiles`, file);
     });
 
