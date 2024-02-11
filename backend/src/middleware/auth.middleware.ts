@@ -18,10 +18,9 @@ export const verifyToken = (
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY!);
-    req.userId = (decoded as JwtPayload).userId;
+    req.userId = (decoded as JwtPayload).user;
     next();
   } catch (error) {
     console.log(error);
