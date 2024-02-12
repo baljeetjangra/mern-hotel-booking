@@ -16,7 +16,7 @@ const Header = async () => {
         {session ? (
           <div className="text-white">
             <Link href={"/my-hotels"}>My Hotels </Link>
-            <Link className="" href="api/auth/signout">
+            <Link className="" href="/api/auth/signout">
               Sign out
             </Link>
           </div>

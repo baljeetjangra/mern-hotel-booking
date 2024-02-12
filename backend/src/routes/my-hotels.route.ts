@@ -75,4 +75,19 @@ router.get("/", verifyToken, async (req: Request, res: Response) => {
   }
 });
 
+router.get("/:id", verifyToken, async (req: Request, res: Response) => {
+  try {
+    const hotel = await Hotel.find({
+      _id: req.params.id.toString(),
+      userId: req.userId,
+    });
+    if (!hotel) {
+      return res.status(404).json({ message: "Hotel not found" });
+    }
+    res.status(200).send(hotel);
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong!" });
+  }
+});
+
 export default router;

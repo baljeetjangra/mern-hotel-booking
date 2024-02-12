@@ -76,3 +76,20 @@ export const getMyHotels = async (): Promise<HotelType[]> => {
 
   return responseBody;
 };
+
+export const getHotelById = async (id: string): Promise<HotelType> => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/my-hotels/${id}`,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
+  const responseBody = await response.json();
+  console.log("🚀 ~ getHotelById ~ responddddseBody:", responseBody);
+  if (!response.ok) {
+    throw new Error(responseBody.message);
+  }
+
+  return responseBody;
+};
