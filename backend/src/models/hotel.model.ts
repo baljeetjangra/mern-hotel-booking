@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 
 export type HotelType = {
+  imageFiles: any;
   _id: string;
   userId: string;
   name: string;
@@ -13,7 +14,7 @@ export type HotelType = {
   facilities: string[];
   pricePerNight: number;
   starRating: number;
-  imageUrls: string[];
+  imageUrls?: string[];
   lastUpdated: Date;
 };
 

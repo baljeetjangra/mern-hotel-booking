@@ -12,12 +12,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { addHotel } from "@/lib/apiClient";
 import { toast } from "sonner";
+import { HotelType } from "@/types";
+import Image from "next/image";
 
 export const hotelFormSchema = z.object({
   name: z.string().min(3),
@@ -35,6 +37,7 @@ export const hotelFormSchema = z.object({
       message: "You have to select at least one item.",
     }),
   imageFiles: z.instanceof(FileList),
+  imageUrls: z.array(z.string()).optional(),
 });
 
 const hotelTypes = [
@@ -62,13 +65,25 @@ const hotelFacilities = [
   { label: "Family Rooms", value: "family_rooms" },
 ];
 
-const CreateHotelForm = () => {
+const CreateHotelForm = ({
+  hotel,
+  onSave,
+  isLoading,
+}: {
+  hotel: HotelType;
+  onSave: (data: FormData) => void;
+  isLoading: boolean;
+}) => {
   const form = useForm<z.infer<typeof hotelFormSchema>>({
     resolver: zodResolver(hotelFormSchema),
     defaultValues: {
       facilities: [],
     },
   });
+
+  useEffect(() => {
+    form.reset(hotel);
+  }, [hotel, form]);
 
   const fileRef = form.register("imageFiles");
 
@@ -82,6 +97,9 @@ const CreateHotelForm = () => {
   function onSubmit(values: z.infer<typeof hotelFormSchema>) {
     const formData = new FormData();
 
+    if (hotel) {
+      formData.append("id", hotel._id);
+    }
     formData.append("name", values.name);
     formData.append("city", values.city);
     formData.append("country", values.country);
@@ -100,8 +118,29 @@ const CreateHotelForm = () => {
       formData.append(`imageFiles`, file);
     });
 
-    mutate(formData);
+    if (values.imageUrls) {
+      values.imageUrls.forEach((url, index) => {
+        formData.append(`imageUrls[${index}]`, url);
+      });
+    }
+
+    if (hotel) {
+      onSave(formData);
+    } else {
+      mutate(formData);
+    }
   }
+
+  const imageUrls: string[] | undefined = form.watch("imageUrls");
+
+  const handleDelete = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    imageUrl: string
+  ) => {
+    e.preventDefault();
+    const newImageUrls = imageUrls?.filter((url) => url !== imageUrl);
+    form.setValue("imageUrls", newImageUrls);
+  };
 
   return (
     <Form {...form}>
@@ -213,7 +252,7 @@ const CreateHotelForm = () => {
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value}
                   className="flex flex-wrap space-y-1"
                 >
                   {hotelTypes.map((item) => (
@@ -313,6 +352,18 @@ const CreateHotelForm = () => {
         <FormField
           control={form.control}
           name="imageFiles"
+          rules={{
+            validate: (value) => {
+              if (value.length === 0) {
+                return "Please select at least one image.";
+              } else if (imageUrls && value.length + imageUrls?.length > 6) {
+                return "You can select up to 6 images";
+              } else if (value.length > 6) {
+                return "You can select up to 6 images";
+              }
+              return true;
+            },
+          }}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Images</FormLabel>
@@ -323,7 +374,32 @@ const CreateHotelForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        {imageUrls && imageUrls?.length > 0 && (
+          <div className="flex items-start flex-wrap gap-4">
+            {imageUrls.map((imageUrl) => {
+              return (
+                <div className="relative group h-32 w-32" key={imageUrl}>
+                  <Image
+                    className=" object-cover"
+                    src={imageUrl}
+                    layout="fill"
+                    objectFit="cover"
+                    alt={imageUrl}
+                  />
+                  <Button
+                    className="absolute inset-0 h-full opacity-0 group-hover:opacity-80"
+                    onClick={(e) => handleDelete(e, imageUrl)}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+        <Button type="submit" disabled={isPending || isLoading}>
+          {isPending || isLoading ? "Saving" : "Save"}
+        </Button>
       </form>
     </Form>
   );

@@ -86,7 +86,27 @@ export const getHotelById = async (id: string): Promise<HotelType> => {
     }
   );
   const responseBody = await response.json();
-  console.log("🚀 ~ getHotelById ~ responddddseBody:", responseBody);
+  if (!response.ok) {
+    throw new Error(responseBody.message);
+  }
+
+  return responseBody;
+};
+
+export const updateHotelById = async (
+  formData: FormData
+): Promise<HotelType> => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/my-hotels/${formData.get(
+      "id"
+    )}`,
+    {
+      method: "PUT",
+      credentials: "include",
+      body: formData,
+    }
+  );
+  const responseBody = await response.json();
   if (!response.ok) {
     throw new Error(responseBody.message);
   }

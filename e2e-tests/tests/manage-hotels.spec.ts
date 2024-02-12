@@ -42,7 +42,7 @@ test("should allow user to add a hotel", async ({ page }) => {
     path.join(__dirname, "files", "hotel2.jpg"),
   ]);
 
-  await page.getByRole("button", { name: "Submit" }).click();
+  await page.getByRole("button", { name: "Save" }).click();
 
   await expect(page.getByText("Hotel Saved!")).toBeVisible();
 });
@@ -63,4 +63,24 @@ test("should allow user to view their hotels", async ({ page }) => {
   await expect(page.getByText("3")).toBeVisible();
 
   await expect(page.getByRole("link", { name: "View Details" })).toBeVisible();
+});
+
+test("should edit hotel details", async ({ page }) => {
+  await page.goto(UI_URL + "/my-hotels");
+
+  await page.getByRole("link", { name: "View Details" }).click();
+
+  await page.waitForSelector('[name="name"]', { state: "attached" });
+
+  await expect(page.locator('[name="name"]')).toHaveValue("Test hotel");
+
+  await page.locator('[name="name"]').fill("Updated hotel");
+
+  await page.getByRole("button", { name: "Save" }).click();
+
+  await expect(page.getByText("Hotel Saved!")).toBeVisible();
+
+  await page.reload();
+
+  await expect(page.locator('[name="name"]')).toHaveValue("Updated hotel");
 });

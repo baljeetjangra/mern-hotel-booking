@@ -5,7 +5,7 @@ import {
   HydrationBoundary,
 } from "@tanstack/react-query";
 import React from "react";
-import Test from "./Test";
+import ManageHotelForm from "../../../../components/shared/forms/ManageHotelForm";
 
 const page = async ({ params }: { params: { id: string } }) => {
   const queryClient = new QueryClient();
@@ -17,7 +17,7 @@ const page = async ({ params }: { params: { id: string } }) => {
   return (
     <div>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <Test />
+        <ManageHotelForm />
       </HydrationBoundary>
     </div>
   );
