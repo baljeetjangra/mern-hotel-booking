@@ -70,9 +70,9 @@ const CreateHotelForm = ({
   onSave,
   isLoading,
 }: {
-  hotel: HotelType;
-  onSave: (data: FormData) => void;
-  isLoading: boolean;
+  hotel?: HotelType;
+  onSave?: (data: FormData) => void;
+  isLoading?: boolean;
 }) => {
   const form = useForm<z.infer<typeof hotelFormSchema>>({
     resolver: zodResolver(hotelFormSchema),
@@ -124,7 +124,7 @@ const CreateHotelForm = ({
       });
     }
 
-    if (hotel) {
+    if (hotel && onSave) {
       onSave(formData);
     } else {
       mutate(formData);

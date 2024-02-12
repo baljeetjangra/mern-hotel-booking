@@ -103,7 +103,6 @@ router.put(
       }
 
       const files = req.files as Express.Multer.File[];
-      console.log("🚀 ~ router.put ~ ̥:", updatedHotel);
 
       const imageUrls = await uploadImages(files);
 
