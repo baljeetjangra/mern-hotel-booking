@@ -10,6 +10,7 @@ import cookieParser from "cookie-parser";
 import userRoutes from "./routes/user.route";
 import authRoutes from "./routes/auth.route";
 import myHotelsRoutes from "./routes/my-hotels.route";
+import hotelRoutes from "./routes/hotels.route";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -34,6 +35,7 @@ app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/my-hotels", myHotelsRoutes);
+app.use("/api/hotels", hotelRoutes);
 
 app.get("/health", async (req: Request, res: Response) => {
   res.send("Hello World");

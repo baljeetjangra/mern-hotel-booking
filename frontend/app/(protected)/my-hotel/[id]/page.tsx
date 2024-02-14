@@ -15,7 +15,7 @@ const page = async ({ params }: { params: { id: string } }) => {
   });
 
   return (
-    <div>
+    <div className="my-8">
       <HydrationBoundary state={dehydrate(queryClient)}>
         <ManageHotelForm />
       </HydrationBoundary>

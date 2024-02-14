@@ -1,3 +1,4 @@
+import { searchFormSchema } from "@/components/shared/forms/SearchHotels";
 import { loginFormSchema } from "@/components/shared/forms/SignIn";
 import { registerFormSchema } from "@/components/shared/forms/Signup";
 import { HotelType } from "@/types";
@@ -107,6 +108,32 @@ export const updateHotelById = async (
     }
   );
   const responseBody = await response.json();
+  if (!response.ok) {
+    throw new Error(responseBody.message);
+  }
+
+  return responseBody;
+};
+
+export const searchHotels = async (
+  searchParams: z.infer<typeof searchFormSchema>
+) => {
+  const queryParams = new URLSearchParams();
+  queryParams.set("destination", searchParams.destination || "");
+  queryParams.set("checkIn", searchParams.checkIn?.toISOString() || "");
+  queryParams.set("checkOut", searchParams.checkOut?.toISOString() || "");
+  queryParams.set("adultCount", searchParams.adultCount?.toString() || "");
+  queryParams.set("childCount", searchParams.childCount?.toString() || "");
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/hotels/search?${queryParams}`,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
+  const responseBody = await response.json();
+
   if (!response.ok) {
     throw new Error(responseBody.message);
   }

@@ -18,11 +18,11 @@ const page = async () => {
   });
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 my-8 container mx-auto sm:py-4 md:py-0">
       <div className="flex justify-between items-center">
-        <h1>My Hotels</h1>
+        <h1 className="text-2xl font-bold">My Hotels</h1>
         <Link href="/add-hotel">
-          <Button>Add Hotel</Button>
+          <Button className="rounded-full">Add Hotel</Button>
         </Link>
       </div>
       <HydrationBoundary state={dehydrate(queryClient)}>

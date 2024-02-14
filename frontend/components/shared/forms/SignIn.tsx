@@ -72,7 +72,9 @@ const SignIn = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Login</Button>
+        <Button type="submit" className="rounded-full">
+          Login
+        </Button>
       </form>
     </Form>
   );

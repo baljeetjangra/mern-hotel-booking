@@ -321,7 +321,7 @@ const CreateHotelForm = ({
           />
         </div>
         <p className="text-xl font-bold mb-4">Guests</p>
-        <div className="flex justify-between items-center">
+        <div className="grid grid-cols-2 gap-8">
           <FormField
             control={form.control}
             name="adultCount"
@@ -397,7 +397,11 @@ const CreateHotelForm = ({
             })}
           </div>
         )}
-        <Button type="submit" disabled={isPending || isLoading}>
+        <Button
+          type="submit"
+          disabled={isPending || isLoading}
+          className="rounded-full"
+        >
           {isPending || isLoading ? "Saving" : "Save"}
         </Button>
       </form>
