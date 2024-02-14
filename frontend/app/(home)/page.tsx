@@ -6,7 +6,7 @@ export default async function Home() {
   return (
     <main className="container mx-auto py-10">
       <Hero />
-      <div className="-my-56 mx-4 shadow-lg relative z-99">
+      <div className="absolute -my-56 mx-2 shadow-lg  z-99">
         <SearchHotels />
       </div>
     </main>

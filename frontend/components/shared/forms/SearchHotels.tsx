@@ -50,7 +50,6 @@ const SearchHotels = ({
   }, [form, searchParams]);
 
   const onSubmit = (values: z.infer<typeof searchFormSchema>) => {
-    console.log(values);
     router.push(`/search?${queryString.stringify(values)}`, {});
   };
 
@@ -58,7 +57,7 @@ const SearchHotels = ({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex justify-between items-center flex-wrap bg-primary p-6 rounded-xl "
+        className="flex justify-between items-center flex-wrap bg-primary p-6 rounded-xl gap-2"
       >
         <FormField
           control={form.control}

@@ -91,6 +91,7 @@ const CreateHotelForm = ({
     mutationFn: (data: FormData) => addHotel(data),
     onSuccess: (data) => {
       toast.success("Hotel Saved!");
+      form.reset();
     },
   });
 

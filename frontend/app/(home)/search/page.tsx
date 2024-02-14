@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-query";
 import React from "react";
 import { z } from "zod";
+import SearchResults from "./SearchResults";
 
 const page = async ({
   searchParams,
@@ -26,10 +27,12 @@ const page = async ({
   return (
     <main className="container mx-auto py-10">
       <Hero />
-      <div className="-my-56 mx-4 shadow-lg relative z-99">
+      <div className="absolute -my-56 mx-2 shadow-lg  z-99">
         <SearchHotels />
       </div>
-      <HydrationBoundary state={dehydrate(queryClient)}></HydrationBoundary>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <SearchResults />
+      </HydrationBoundary>
     </main>
   );
 };
