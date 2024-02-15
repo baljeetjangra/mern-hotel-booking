@@ -1,7 +1,7 @@
 import { searchFormSchema } from "@/components/shared/forms/SearchHotels";
 import { loginFormSchema } from "@/components/shared/forms/SignIn";
 import { registerFormSchema } from "@/components/shared/forms/Signup";
-import { HotelType } from "@/types";
+import { HotelType, SearchFormParams } from "@/types";
 import { z } from "zod";
 
 export const register = async (
@@ -115,15 +115,29 @@ export const updateHotelById = async (
   return responseBody;
 };
 
-export const searchHotels = async (
-  searchParams: z.infer<typeof searchFormSchema>
-) => {
+export const searchHotels = async (searchParams: SearchFormParams) => {
   const queryParams = new URLSearchParams();
   queryParams.set("destination", searchParams.destination || "");
   queryParams.set("checkIn", searchParams.checkIn?.toISOString() || "");
   queryParams.set("checkOut", searchParams.checkOut?.toISOString() || "");
   queryParams.set("adultCount", searchParams.adultCount?.toString() || "");
   queryParams.set("childCount", searchParams.childCount?.toString() || "");
+  queryParams.set("page", searchParams.page?.toString() || "1");
+
+  queryParams.set("maxPrice", searchParams.maxPrice?.toString() || "");
+  queryParams.set("sortOption", searchParams.sortOption || "");
+
+  searchParams.facilities?.forEach((facility) => {
+    queryParams.append("facilities", facility);
+  });
+
+  searchParams.types?.forEach((type) => {
+    queryParams.append("types", type);
+  });
+
+  searchParams.stars?.forEach((star) => {
+    queryParams.append("stars", star);
+  });
 
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/hotels/search?${queryParams}`,

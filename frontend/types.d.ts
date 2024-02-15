@@ -16,11 +16,27 @@ export type HotelType = {
   lastUpdated: Date;
 };
 
+export type HotelSearchPagination = {
+  total: number;
+  page: number;
+  pages: number;
+};
+
 export type HotelSearchResponse = {
   data: HotelType[];
-  pagination: {
-    total: number;
-    page: number;
-    pages: number;
-  };
+  pagination: HotelSearchPagination;
+};
+
+export type SearchFormParams = {
+  destination?: string;
+  adultCount?: number;
+  childCount?: number;
+  checkIn?: Date;
+  checkOut?: Date;
+  page?: number;
+  facilities?: string[];
+  types?: string[];
+  stars?: string[];
+  maxPrice?: number;
+  sortOption?: string;
 };

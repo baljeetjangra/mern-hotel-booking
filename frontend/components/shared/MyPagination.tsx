@@ -26,15 +26,16 @@ const MyPagination = ({
     <div>
       <Pagination>
         <PaginationContent>
-          <PaginationItem>
+          {/* <PaginationItem >
             <PaginationPrevious
               href="#"
               onClick={(e) => {
                 e.preventDefault();
                 onPageChange(page - 1);
               }}
+              
             />
-          </PaginationItem>
+          </PaginationItem> */}
           {pageNumbers.map((pageNumber) => (
             <PaginationItem key={pageNumber}>
               <PaginationLink
@@ -49,7 +50,7 @@ const MyPagination = ({
               </PaginationLink>
             </PaginationItem>
           ))}
-          <PaginationItem>
+          {/* <PaginationItem>
             <PaginationNext
               href="#"
               onClick={(e) => {
@@ -57,7 +58,7 @@ const MyPagination = ({
                 onPageChange(page + 1);
               }}
             />
-          </PaginationItem>
+          </PaginationItem> */}
         </PaginationContent>
       </Pagination>
     </div>

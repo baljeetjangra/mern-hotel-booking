@@ -9,14 +9,10 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 import React from "react";
-import { z } from "zod";
 import SearchResults from "./SearchResults";
+import { SearchFormParams } from "@/types";
 
-const page = async ({
-  searchParams,
-}: {
-  searchParams: z.infer<typeof searchFormSchema>;
-}) => {
+const page = async ({ searchParams }: { searchParams: SearchFormParams }) => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
