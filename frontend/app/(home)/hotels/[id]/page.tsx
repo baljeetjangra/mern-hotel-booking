@@ -1,23 +1,24 @@
-import { getHotelsById } from "@/lib/apiClient";
+import { getHotelById } from "@/lib/apiClient";
 import {
+  HydrationBoundary,
   QueryClient,
   dehydrate,
-  HydrationBoundary,
 } from "@tanstack/react-query";
 import React from "react";
-import ManageHotelForm from "../../../../components/shared/forms/ManageHotelForm";
+import HotelDetails from "./HotelDetails";
 
 const page = async ({ params }: { params: { id: string } }) => {
   const queryClient = new QueryClient();
+
   await queryClient.prefetchQuery({
     queryKey: ["hotel", params.id],
-    queryFn: () => getHotelsById(params.id),
+    queryFn: () => getHotelById(params.id),
   });
 
   return (
     <div className="my-8">
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <ManageHotelForm />
+        <HotelDetails />
       </HydrationBoundary>
     </div>
   );

@@ -1,29 +1,13 @@
 import { Request, Response, Router } from "express";
 import Hotel from "../models/hotel.model";
 import { HotelSearchResponse } from "../shared/types";
+import { param } from "express-validator";
 
 const router = Router();
 
 router.get("/search", async (req: Request, res: Response) => {
   try {
     const query = constructSearchQuery(req.query);
-
-    let sortOptions = {};
-
-    switch (req.query.sortOption) {
-      case "starRating":
-        sortOptions = { starRating: -1 };
-        break;
-      case "pricePerNightAsc":
-        sortOptions = { pricePerNight: 1 };
-        break;
-      case "pricePerNightDesc":
-        sortOptions = { pricePerNight: -1 };
-        break;
-
-      default:
-        break;
-    }
 
     const pageSize = 5;
     const pageNumber = parseInt(
@@ -32,10 +16,7 @@ router.get("/search", async (req: Request, res: Response) => {
 
     const skip = pageSize * (pageNumber - 1);
 
-    const hotels = await Hotel.find(query)
-      .sort(sortOptions)
-      .skip(skip)
-      .limit(pageSize);
+    const hotels = await Hotel.find(query).skip(skip).limit(pageSize);
 
     const total = await Hotel.countDocuments(query);
 
@@ -55,6 +36,23 @@ router.get("/search", async (req: Request, res: Response) => {
     res.status(500).json({ message: "Somethings went wrong" });
   }
 });
+
+router.get(
+  "/:id",
+  [param("id").notEmpty().withMessage("Hotel Id id required")],
+  async (req: Request, res: Response) => {
+    try {
+      const id = req.params.id;
+      const hotel = await Hotel.findById(id);
+
+      res.status(200).json(hotel);
+    } catch (error) {
+      console.log("Error getting hotels", error);
+
+      res.status(500).json({ message: "Somethings went wrong" });
+    }
+  }
+);
 
 const constructSearchQuery = (queryParams: any) => {
   let constructedQuery: any = {};

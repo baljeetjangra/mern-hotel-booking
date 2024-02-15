@@ -78,7 +78,7 @@ export const getMyHotels = async (): Promise<HotelType[]> => {
   return responseBody;
 };
 
-export const getHotelById = async (id: string): Promise<HotelType> => {
+export const getHotelsById = async (id: string): Promise<HotelType> => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/my-hotels/${id}`,
     {
@@ -148,6 +148,22 @@ export const searchHotels = async (searchParams: SearchFormParams) => {
   );
   const responseBody = await response.json();
 
+  if (!response.ok) {
+    throw new Error(responseBody.message);
+  }
+
+  return responseBody;
+};
+
+export const getHotelById = async (id: string): Promise<HotelType> => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/hotels/${id}`,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
+  const responseBody = await response.json();
   if (!response.ok) {
     throw new Error(responseBody.message);
   }
