@@ -24,6 +24,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export const BookHotelFormSchema = z.object({
   checkIn: z.date(),
@@ -32,7 +33,7 @@ export const BookHotelFormSchema = z.object({
   childCount: z.coerce.number(),
 });
 
-const BookHotelForm = ({
+const GuestInfoForm = ({
   hotelId,
   pricePerNight,
 }: {
@@ -40,12 +41,19 @@ const BookHotelForm = ({
   pricePerNight: number;
 }) => {
   const { data: session } = useSession();
+  const router = useRouter();
   const form = useForm<z.infer<typeof BookHotelFormSchema>>({
     resolver: zodResolver(BookHotelFormSchema),
   });
 
   const onSubmit = (values: z.infer<typeof BookHotelFormSchema>) => {
-    console.log(values);
+    sessionStorage.setItem("childCount", values.childCount.toString());
+    sessionStorage.setItem("adultCount", values.adultCount.toString());
+    sessionStorage.setItem("checkIn", values.checkIn.toISOString());
+    sessionStorage.setItem("checkOut", values.checkOut.toISOString());
+    sessionStorage.setItem("hotelId", hotelId);
+    sessionStorage.setItem("pricePerNight", pricePerNight.toString());
+    router.push(`/book/${hotelId}`);
   };
 
   return (
@@ -116,7 +124,7 @@ const BookHotelForm = ({
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent className="w-auto p-0 bg-white" align="start">
                   <Calendar
                     mode="single"
                     selected={field.value}
@@ -158,7 +166,7 @@ const BookHotelForm = ({
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent className="w-auto bg-white p-0" align="start">
                   <Calendar
                     mode="single"
                     selected={field.value}
@@ -180,11 +188,15 @@ const BookHotelForm = ({
             Book Now
           </Button>
         ) : (
-          <Link href="/auth/signin">Signin to book</Link>
+          <Link href="/auth/signin" className="block">
+            <Button className="" variant={"outline"}>
+              Signin to book
+            </Button>
+          </Link>
         )}
       </form>
     </Form>
   );
 };
 
-export default BookHotelForm;
+export default GuestInfoForm;

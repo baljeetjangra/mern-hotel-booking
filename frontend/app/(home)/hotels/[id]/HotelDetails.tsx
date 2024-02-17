@@ -1,5 +1,5 @@
 "use client";
-import BookHotelForm from "@/components/shared/forms/BookHotelForm";
+import GuestInfoForm from "@/components/shared/forms/GuestInfoForm";
 import { Badge } from "@/components/ui/badge";
 import { getHotelsById } from "@/lib/apiClient";
 import { useQuery } from "@tanstack/react-query";
@@ -47,10 +47,7 @@ const HotelDetails = () => {
 
       <p>{hotel.description}</p>
 
-      <BookHotelForm
-        hotelId={"params.id! as string"}
-        pricePerNight={hotel.pricePerNight}
-      />
+      <GuestInfoForm hotelId={hotel._id} pricePerNight={hotel.pricePerNight} />
     </section>
   );
 };

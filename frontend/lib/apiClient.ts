@@ -1,8 +1,30 @@
+import { BookingFormSchema } from "@/components/shared/forms/BookingForm";
 import { searchFormSchema } from "@/components/shared/forms/SearchHotels";
 import { loginFormSchema } from "@/components/shared/forms/SignIn";
 import { registerFormSchema } from "@/components/shared/forms/Signup";
-import { HotelType, SearchFormParams } from "@/types";
+import {
+  BookingType,
+  HotelType,
+  PaymentIntentResponse,
+  SearchFormParams,
+  UserType,
+} from "@/types";
 import { z } from "zod";
+
+export const fetchCurrentUser = async (): Promise<UserType> => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/me`,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
+  const responseBody = await response.json();
+  if (!response.ok) {
+    throw new Error(responseBody.message);
+  }
+  return responseBody;
+};
 
 export const register = async (
   formData: z.infer<typeof registerFormSchema>
@@ -161,6 +183,51 @@ export const getHotelById = async (id: string): Promise<HotelType> => {
     {
       method: "GET",
       credentials: "include",
+    }
+  );
+  const responseBody = await response.json();
+  if (!response.ok) {
+    throw new Error(responseBody.message);
+  }
+
+  return responseBody;
+};
+
+export const createPaymentIntent = async (
+  hotelId: string,
+  numberOfNights: number
+): Promise<PaymentIntentResponse> => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/hotels/${hotelId}/bookings/payment-intent`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ numberOfNights }),
+    }
+  );
+  const responseBody = await response.json();
+  if (!response.ok) {
+    throw new Error(responseBody.message);
+  }
+
+  return responseBody;
+};
+
+export const createRoomBooking = async (
+  formData: z.infer<typeof BookingFormSchema>
+) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/hotels/${formData.hotelId}/bookings`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
     }
   );
   const responseBody = await response.json();
